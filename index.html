@@ -1,128 +1,1544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SONOMA FORGE • Niche Cannabis Selection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=Inter:wght@300;400;500;600&amp;display=swap');
+        
+        :root {
+            --emerald: #10b981;
+        }
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .heading-serif {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
 
-SONOMA FORGE
-EST 2012 • NICHE CANNABIS
-The Collection Strain Matcher The Journal Cultivators
-David B.
-My Forge
-0
+        .premium-shadow {
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+        }
 
+        .glass {
+            background: rgba(255,255,255, 0.06);
+            backdrop-filter: blur(20px);
+        }
 
+        .section-header {
+            font-size: 2.25rem;
+            line-height: 1.1;
+            letter-spacing: -0.04em;
+        }
 
+        .strain-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .strain-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 30px 70px -15px rgb(16 185 129 / 0.25);
+        }
+        
+        .strain-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                transparent 60%,
+                rgba(16, 185, 129, 0.08) 100%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .strain-card:hover::after {
+            opacity: 1;
+        }
 
+        .nav-active {
+            color: #10b981;
+            position: relative;
+        }
+        
+        .nav-active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, #10b981, transparent);
+        }
 
-Limited Winter 2026 Release
-FORGED IN SONOMA VALLEY
-Eight extraordinary niche strains. Hand-selected from the valley's most revered cultivators.
-BROWSE THE COLLECTION LAUNCH STRAIN MATCHER
-Sonoma County, CA
+        .filter-chip {
+            transition: all 0.2s ease;
+        }
+        
+        .filter-chip.active {
+            background-color: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
 
-100% Indoor • Organic • Terpene-Rich
-SCROLL TO EXPLORE
-8× Award-Winning
-High Times • Emerald Cup
-4,812 Connoisseurs
-This season alone
-Single-Source
-Traceable to the exact row
-Same-Day Delivery
-Sonoma • Marin • SF
-CURATED SELECTION
-The 2026 Winter Collection
-Eight limited-release strains forged for the most discerning palates.
+        .product-image {
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .strain-card:hover .product-image {
+            transform: scale(1.08);
+        }
 
-                    Featured
-                    Highest THC
-                    Lowest THC
-                    Price: Low to High
-                    Price: High to Low
+        .luxury-gradient {
+            background: linear-gradient(135deg, #111111 0%, #1a1a1a 100%);
+        }
+
+        .stat-pill {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .modal {
+            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .forge-glow {
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.5);
+        }
+
+        .cannabis-leaf {
+            animation: leafSway 4s ease-in-out infinite;
+        }
+
+        .premium-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .premium-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255,255,255,0.25),
+                transparent
+            );
+            transform: skewX(25deg);
+            transition: left 0.6s;
+        }
+        
+        .premium-btn:hover::after {
+            left: 150%;
+        }
+
+        .metric-bar {
+            height: 4px;
+            background: linear-gradient(to right, #10b981, #34d399);
+            border-radius: 9999px;
+        }
+
+        .selection-count {
+            animation: popIn 0.3s ease forwards;
+        }
+    </style>
+</head>
+<body class="bg-[#0a0a0a] text-white overflow-x-hidden">
+    <!-- NAV -->
+    <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-[#0a0a0a]/95 backdrop-blur-xl">
+        <div class="max-w-screen-2xl mx-auto">
+            <div class="px-8 py-5 flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center gap-x-3">
+                    <div class="w-9 h-9 bg-emerald-500 flex items-center justify-center rounded-xl shadow-[0_0_20px_rgb(16,185,129)]">
+                        <i class="fa-solid fa-hammer text-[#0a0a0a] text-3xl"></i>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-3xl tracking-tighter">SONOMA FORGE</div>
+                        <div class="text-[10px] text-emerald-400 -mt-1 tracking-[3px]">EST 2012 • NICHE CANNABIS</div>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex items-center gap-x-9 text-sm font-medium">
+                    <a href="#" class="hover:text-emerald-400 transition-colors">The Collection</a>
+                    <a href="#" onclick="showMatcher()" class="hover:text-emerald-400 transition-colors">Strain Matcher</a>
+                    <a href="#" class="hover:text-emerald-400 transition-colors">The Journal</a>
+                    <a href="#" class="hover:text-emerald-400 transition-colors">Cultivators</a>
+                </div>
+
+                <div class="flex items-center gap-x-4">
+                    <!-- Account -->
+                    <div class="hidden md:flex items-center gap-x-2 px-4 py-2 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors cursor-pointer">
+                        <i class="fa-solid fa-user text-emerald-400"></i>
+                        <span class="text-sm font-medium">David B.</span>
+                    </div>
+                    
+                    <!-- Cart -->
+                    <div onclick="toggleCart()" class="relative flex items-center gap-x-2 px-5 py-2.5 rounded-2xl bg-white/5 hover:bg-white/10 transition-all cursor-pointer border border-white/10">
+                        <i class="fa-solid fa-shopping-bag text-xl"></i>
+                        <div>
+                            <span class="text-sm font-semibold">My Forge</span>
+                        </div>
+                        <div id="cart-count" 
+                             class="absolute -top-1 -right-1 w-6 h-6 bg-emerald-500 text-[#0a0a0a] text-xs font-bold rounded-full flex items-center justify-center shadow-[0_0_12px_rgb(16,185,129)]">
+                            0
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile menu -->
+                    <div class="md:hidden w-10 h-10 flex items-center justify-center rounded-2xl bg-white/5">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="pt-20 relative h-screen flex items-center justify-center overflow-hidden">
+        <!-- Background -->
+        <div class="absolute inset-0 bg-[radial-gradient(#1f2937_0.8px,transparent_1px)] bg-[length:4px_4px]"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/70 to-[#0a0a0a]"></div>
+        
+        <!-- Subtle leaf pattern -->
+        <div class="absolute inset-0 opacity-10" 
+             style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27100%27 height=%27100%27%3E%3Cpath fill-rule=%27evenodd%27 clip-rule=%27evenodd%27 d=%27M50 20 Q70 35 65 55 Q60 75 40 70 Q25 65 30 45 Q35 25 50 20Z%27 fill=%27%2310b981%27/%3E%3C/svg%27'); background-size: 120px;"></div>
+        
+        <div class="max-w-screen-2xl mx-auto px-8 relative z-10 text-center">
+            <div class="inline-flex items-center gap-x-2 px-5 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/30 mb-6">
+                <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                <span class="uppercase text-xs tracking-[2px] font-semibold text-emerald-400">Limited Winter 2026 Release</span>
+            </div>
+            
+            <h1 class="text-7xl md:text-8xl font-bold tracking-tighter heading-serif mb-6">
+                FORGED IN<br>SONOMA VALLEY
+            </h1>
+            
+            <p class="max-w-[620px] mx-auto text-2xl text-white/70 mb-10 font-light">
+                Eight extraordinary niche strains.<br>
+                Hand-selected from the valley's most revered cultivators.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button onclick="document.getElementById('collection').scrollIntoView({ behavior: 'smooth' })" 
+                        class="premium-btn group px-10 py-4 bg-white text-[#0a0a0a] font-semibold rounded-3xl flex items-center justify-center gap-x-3 hover:bg-emerald-400 transition-all text-lg">
+                    <span>BROWSE THE COLLECTION</span>
+                    <i class="fa-solid fa-arrow-right group-hover:-rotate-45 transition-transform"></i>
+                </button>
                 
-All
-Indica
-Sativa
-Hybrid
-THC
-18–32%
-Relax
-Focus
-Creative
-Euphoric
-Sedative
+                <button onclick="showMatcher()" 
+                        class="px-8 py-4 border border-white/30 hover:bg-white/5 rounded-3xl flex items-center gap-x-3 text-lg font-medium transition-all">
+                    <i class="fa-solid fa-magic"></i>
+                    <span>LAUNCH STRAIN MATCHER</span>
+                </button>
+            </div>
+            
+            <div class="mt-16 flex justify-center">
+                <div class="flex items-center gap-x-8 text-sm text-white/50">
+                    <div class="flex items-center gap-x-2">
+                        <i class="fa-solid fa-globe"></i>
+                        <span>Sonoma County, CA</span>
+                    </div>
+                    <div class="w-px h-3 bg-white/20"></div>
+                    <div>100% Indoor • Organic • Terpene-Rich</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center">
+            <div class="text-xs tracking-[2px] mb-1.5 text-white/40">SCROLL TO EXPLORE</div>
+            <i class="fa-solid fa-chevron-down animate-bounce text-emerald-400"></i>
+        </div>
+    </div>
 
-Showing 8 of 8 limited releases
-PERSONALIZED
-Find your perfect match.
-Answer a few questions about your mood, preferred effects, and palate. Our master cultivator algorithm will recommend the ideal strain for you.
-START STRAIN MATCHER
-￼
-￼
-￼
-92% match rate
-AI POWERED
+    <!-- TRUST / STATS -->
+    <div class="border-b border-white/10 bg-[#111]">
+        <div class="max-w-screen-2xl mx-auto px-8 py-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10">
+                <div class="bg-[#0a0a0a] px-8 py-5 flex items-center gap-x-4">
+                    <i class="fa-solid fa-medal text-3xl text-emerald-400"></i>
+                    <div>
+                        <div class="font-semibold">8× Award-Winning</div>
+                        <div class="text-xs text-white/50">High Times • Emerald Cup</div>
+                    </div>
+                </div>
+                <div class="bg-[#0a0a0a] px-8 py-5 flex items-center gap-x-4">
+                    <i class="fa-solid fa-users text-3xl text-emerald-400"></i>
+                    <div>
+                        <div class="font-semibold">4,812 Connoisseurs</div>
+                        <div class="text-xs text-white/50">This season alone</div>
+                    </div>
+                </div>
+                <div class="bg-[#0a0a0a] px-8 py-5 flex items-center gap-x-4">
+                    <i class="fa-solid fa-leaf text-3xl text-emerald-400"></i>
+                    <div>
+                        <div class="font-semibold">Single-Source</div>
+                        <div class="text-xs text-white/50">Traceable to the exact row</div>
+                    </div>
+                </div>
+                <div class="bg-[#0a0a0a] px-8 py-5 flex items-center gap-x-4">
+                    <i class="fa-solid fa-truck text-3xl text-emerald-400"></i>
+                    <div>
+                        <div class="font-semibold">Same-Day Delivery</div>
+                        <div class="text-xs text-white/50">Sonoma • Marin • SF</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-SONOMA FORGE
-Hand-forged cannabis experiences since 2012. Every batch traceable to the exact plant in the hills above Sonoma.
+    <!-- COLLECTION SECTION -->
+    <div id="collection" class="max-w-screen-2xl mx-auto px-8 pt-16 pb-8">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-10">
+            <div>
+                <div class="uppercase tracking-[3px] text-emerald-400 text-sm font-semibold">CURATED SELECTION</div>
+                <h2 class="section-header">The 2026 Winter Collection</h2>
+                <p class="text-white/60 mt-2">Eight limited-release strains forged for the most discerning palates.</p>
+            </div>
+            
+            <div class="mt-6 md:mt-0 flex items-center gap-x-3">
+                <!-- Search -->
+                <div class="relative w-72">
+                    <input id="search-input" 
+                           type="text" 
+                           placeholder="Search strains or terpenes..." 
+                           onkeyup="filterStrains()"
+                           class="w-full bg-white/5 border border-white/10 focus:border-emerald-500 pl-11 py-3 rounded-3xl text-sm placeholder:text-white/40 outline-none">
+                    <i class="fa-solid fa-search absolute left-4 top-4 text-white/40"></i>
+                </div>
+                
+                <select id="sort-select" onchange="filterStrains()" 
+                        class="bg-white/5 border border-white/10 text-sm rounded-3xl px-5 py-3 outline-none cursor-pointer">
+                    <option value="featured">Featured</option>
+                    <option value="thc-high">Highest THC</option>
+                    <option value="thc-low">Lowest THC</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                </select>
+            </div>
+        </div>
 
-EXPLORE
-The Collection
-Private Reserves
-Terpene Library
-Visit the Forge
-NEWSLETTER
-Receive early access to new drops and exclusive cultivation notes.
-JOIN
-We respect your inbox. Unsubscribe anytime.
-© 2026 Sonoma Forge Cannabis. For adults 21+. Not for sale to minors. This is a fictional premium brand experience.
+        <!-- Filters -->
+        <div class="mb-8 flex flex-wrap items-center gap-3">
+            <!-- Type filters -->
+            <div class="flex items-center bg-white/5 rounded-3xl p-1 border border-white/10">
+                <div onclick="setTypeFilter('all')" id="filter-all"
+                     class="filter-chip active px-5 py-2 text-sm font-medium rounded-3xl cursor-pointer">All</div>
+                <div onclick="setTypeFilter('indica')" id="filter-indica"
+                     class="filter-chip px-5 py-2 text-sm font-medium rounded-3xl cursor-pointer flex items-center gap-x-1.5">
+                    <span class="w-2 h-2 bg-violet-400 rounded-full"></span> Indica
+                </div>
+                <div onclick="setTypeFilter('sativa')" id="filter-sativa"
+                     class="filter-chip px-5 py-2 text-sm font-medium rounded-3xl cursor-pointer flex items-center gap-x-1.5">
+                    <span class="w-2 h-2 bg-amber-400 rounded-full"></span> Sativa
+                </div>
+                <div onclick="setTypeFilter('hybrid')" id="filter-hybrid"
+                     class="filter-chip px-5 py-2 text-sm font-medium rounded-3xl cursor-pointer flex items-center gap-x-1.5">
+                    <span class="w-2 h-2 bg-sky-400 rounded-full"></span> Hybrid
+                </div>
+            </div>
+            
+            <!-- THC Range -->
+            <div class="flex items-center gap-x-3 px-5 py-2 bg-white/5 border border-white/10 rounded-3xl text-sm">
+                <span class="font-medium text-white/70">THC</span>
+                <div class="flex items-center gap-x-2">
+                    <input type="range" id="thc-min" min="18" max="32" step="1" value="18" 
+                           oninput="filterStrains()" class="accent-emerald-500 w-24">
+                    <span id="thc-value" class="font-mono w-12 text-center text-emerald-400">18–32%</span>
+                    <input type="range" id="thc-max" min="18" max="32" step="1" value="32" 
+                           oninput="filterStrains()" class="accent-emerald-500 w-24">
+                </div>
+            </div>
+            
+            <!-- Effects -->
+            <div class="flex flex-wrap gap-2">
+                <div onclick="toggleEffect(this, 'relax')" class="effect-chip px-4 py-1.5 text-xs rounded-2xl border border-white/20 cursor-pointer flex items-center gap-x-1.5 hover:border-emerald-500/50">
+                    <i class="fa-solid fa-moon"></i> <span>Relax</span>
+                </div>
+                <div onclick="toggleEffect(this, 'focus')" class="effect-chip px-4 py-1.5 text-xs rounded-2xl border border-white/20 cursor-pointer flex items-center gap-x-1.5 hover:border-emerald-500/50">
+                    <i class="fa-solid fa-brain"></i> <span>Focus</span>
+                </div>
+                <div onclick="toggleEffect(this, 'creative')" class="effect-chip px-4 py-1.5 text-xs rounded-2xl border border-white/20 cursor-pointer flex items-center gap-x-1.5 hover:border-emerald-500/50">
+                    <i class="fa-solid fa-palette"></i> <span>Creative</span>
+                </div>
+                <div onclick="toggleEffect(this, 'euphoric')" class="effect-chip px-4 py-1.5 text-xs rounded-2xl border border-white/20 cursor-pointer flex items-center gap-x-1.5 hover:border-emerald-500/50">
+                    <i class="fa-solid fa-grin-beam"></i> <span>Euphoric</span>
+                </div>
+                <div onclick="toggleEffect(this, 'sedative')" class="effect-chip px-4 py-1.5 text-xs rounded-2xl border border-white/20 cursor-pointer flex items-center gap-x-1.5 hover:border-emerald-500/50">
+                    <i class="fa-solid fa-bed"></i> <span>Sedative</span>
+                </div>
+            </div>
+        </div>
 
-Sonoma Valley, CA
+        <!-- STRAIN GRID -->
+        <div id="strain-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+            <!-- Populated by JS -->
+        </div>
+        
+        <div class="mt-6 text-center text-xs text-white/40">
+            Showing <span id="results-count" class="font-semibold text-emerald-400">8</span> of 8 limited releases
+        </div>
+    </div>
 
+    <!-- STRAIN MATCHER TEASER -->
+    <div class="max-w-screen-2xl mx-auto px-8 py-16 border-t border-white/10">
+        <div class="rounded-3xl bg-gradient-to-br from-emerald-950/60 to-transparent border border-emerald-500/20 p-12 flex flex-col lg:flex-row items-center gap-12">
+            <div class="flex-1">
+                <div class="uppercase tracking-widest text-xs text-emerald-400 mb-3">PERSONALIZED</div>
+                <h3 class="text-5xl font-semibold heading-serif tracking-tight">Find your perfect match.</h3>
+                <p class="mt-4 max-w-md text-lg text-white/70">Answer a few questions about your mood, preferred effects, and palate. Our master cultivator algorithm will recommend the ideal strain for you.</p>
+                
+                <button onclick="showMatcher()" 
+                        class="mt-8 px-9 py-3.5 bg-emerald-500 hover:bg-emerald-600 transition-colors text-black font-semibold rounded-3xl flex items-center gap-x-2">
+                    <span>START STRAIN MATCHER</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+            
+            <div class="flex-1 relative">
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="aspect-[4/3] bg-white/5 rounded-2xl overflow-hidden border border-white/10">
+                        <img src="https://picsum.photos/id/1018/400/300" class="w-full h-full object-cover opacity-75" alt="Strain">
+                    </div>
+                    <div class="aspect-[4/3] bg-white/5 rounded-2xl overflow-hidden border border-white/10 -mt-4">
+                        <img src="https://picsum.photos/id/106/400/300" class="w-full h-full object-cover opacity-75" alt="Strain">
+                    </div>
+                    <div class="aspect-[4/3] bg-white/5 rounded-2xl overflow-hidden border border-white/10">
+                        <img src="https://picsum.photos/id/1074/400/300" class="w-full h-full object-cover opacity-75" alt="Strain">
+                    </div>
+                </div>
+                <div class="absolute -bottom-4 -right-4 bg-black/80 border border-emerald-500/50 px-5 py-3 rounded-2xl text-sm">
+                    <div class="flex items-center gap-x-2">
+                        <div class="text-emerald-400">92% match rate</div>
+                        <div class="text-[10px] px-2 py-px bg-emerald-500 text-black rounded">AI POWERED</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-THC
+    <!-- FOOTER -->
+    <footer class="border-t border-white/10 bg-black py-16">
+        <div class="max-w-screen-2xl mx-auto px-8 grid md:grid-cols-12 gap-y-12">
+            <div class="md:col-span-5">
+                <div class="flex items-center gap-x-3 mb-6">
+                    <div class="w-8 h-8 bg-emerald-500 flex items-center justify-center rounded-xl">
+                        <i class="fa-solid fa-hammer text-black"></i>
+                    </div>
+                    <span class="font-semibold text-2xl tracking-tight">SONOMA FORGE</span>
+                </div>
+                <div class="max-w-xs text-white/50 text-sm leading-relaxed">
+                    Hand-forged cannabis experiences since 2012. 
+                    Every batch traceable to the exact plant in the hills above Sonoma.
+                </div>
+                
+                <div class="mt-8 flex gap-x-4">
+                    <a href="#" class="text-white/40 hover:text-white"><i class="fa-brands fa-instagram text-xl"></i></a>
+                    <a href="#" class="text-white/40 hover:text-white"><i class="fa-brands fa-tiktok text-xl"></i></a>
+                    <a href="#" class="text-white/40 hover:text-white"><i class="fa-brands fa-linkedin text-xl"></i></a>
+                </div>
+            </div>
+            
+            <div class="md:col-span-3 text-sm">
+                <div class="font-semibold mb-4">EXPLORE</div>
+                <div class="space-y-2 text-white/60">
+                    <div>The Collection</div>
+                    <div>Private Reserves</div>
+                    <div>Terpene Library</div>
+                    <div>Visit the Forge</div>
+                </div>
+            </div>
+            
+            <div class="md:col-span-4">
+                <div class="font-semibold mb-4">NEWSLETTER</div>
+                <p class="text-sm text-white/50 mb-4">Receive early access to new drops and exclusive cultivation notes.</p>
+                <div class="flex">
+                    <input type="email" placeholder="your@email.com" 
+                           class="flex-1 bg-white/5 border border-white/10 rounded-l-3xl px-5 py-3 text-sm outline-none">
+                    <button class="px-7 bg-emerald-500 text-black font-medium rounded-r-3xl">JOIN</button>
+                </div>
+                <div class="text-[10px] text-white/30 mt-2">We respect your inbox. Unsubscribe anytime.</div>
+            </div>
+        </div>
+        
+        <div class="mt-20 pt-8 border-t border-white/10 text-center text-xs text-white/30">
+            © 2026 Sonoma Forge Cannabis. For adults 21+. Not for sale to minors. 
+            This is a fictional premium brand experience.
+        </div>
+    </footer>
 
-CBD
+    <!-- PRODUCT MODAL -->
+    <div id="product-modal" onclick="if (event.target.id === 'product-modal') hideModal()" 
+         class="hidden fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-6">
+        <div onclick="event.stopImmediatePropagation()" 
+             class="modal max-w-4xl w-full bg-[#111] rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+            
+            <div class="flex flex-col lg:flex-row">
+                <!-- Image side -->
+                <div class="lg:w-5/12 relative">
+                    <img id="modal-image" class="w-full aspect-[4/3] object-cover" alt="">
+                    <div class="absolute top-6 left-6">
+                        <div id="modal-type-badge" 
+                             class="px-4 py-1 rounded-full text-xs font-bold flex items-center gap-x-2 w-fit"></div>
+                    </div>
+                    <div class="absolute bottom-6 right-6 bg-black/70 px-4 py-1 rounded-2xl text-xs flex items-center gap-x-1">
+                        <i class="fa-solid fa-map-marker-alt text-emerald-400"></i>
+                        <span id="modal-location">Sonoma Valley, CA</span>
+                    </div>
+                </div>
+                
+                <!-- Details side -->
+                <div class="lg:w-7/12 p-8 lg:p-10 flex flex-col">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div id="modal-name" class="text-4xl font-semibold tracking-tight"></div>
+                            <div id="modal-subtitle" class="text-emerald-400 text-sm mt-1"></div>
+                        </div>
+                        <button onclick="hideModal()" class="text-white/50 hover:text-white p-2 -mr-2">
+                            <i class="fa-solid fa-times text-2xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center gap-x-6 mt-6">
+                        <div>
+                            <div class="text-xs text-white/50">THC</div>
+                            <div id="modal-thc" class="text-3xl font-semibold text-emerald-400"></div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-white/50">CBD</div>
+                            <div id="modal-cbd" class="text-3xl font-semibold text-white/80"></div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-white/50">TERPENES</div>
+                            <div id="modal-terps" class="font-mono text-sm"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <div class="uppercase text-xs tracking-widest mb-2 text-white/50">DESCRIPTION</div>
+                        <p id="modal-desc" class="text-white/80 leading-relaxed"></p>
+                    </div>
+                    
+                    <div class="mt-auto pt-8">
+                        <div class="flex items-center justify-between mb-3">
+                            <div>
+                                <span class="font-semibold text-3xl" id="modal-price"></span>
+                                <span class="text-sm text-white/50"> / ⅛ oz</span>
+                            </div>
+                            
+                            <div class="text-right text-xs">
+                                <div class="text-emerald-400">IN STOCK</div>
+                                <div class="text-white/40">42 units remaining</div>
+                            </div>
+                        </div>
+                        
+                        <button onclick="addCurrentToCart()" 
+                                class="premium-btn w-full py-4 bg-emerald-500 hover:bg-emerald-600 transition-all text-lg font-semibold text-black rounded-3xl flex items-center justify-center gap-x-2">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>ADD TO MY FORGE</span>
+                        </button>
+                        
+                        <div class="text-center mt-3 text-xs text-white/40">Free same-day delivery in Sonoma County</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-TERPENES
+    <!-- CART SIDEBAR -->
+    <div id="cart-sidebar" onclick="if (event.target.id === 'cart-sidebar') toggleCart()" 
+         class="hidden fixed inset-0 z-[110] bg-black/70">
+        <div onclick="event.stopImmediatePropagation()" 
+             class="absolute right-0 top-0 h-full w-full max-w-md bg-[#111] border-l border-white/10 flex flex-col">
+            
+            <div class="p-8 flex items-center justify-between border-b border-white/10">
+                <div>
+                    <div class="font-semibold text-2xl">My Forge</div>
+                    <div class="text-xs text-emerald-400">YOUR CURATED SELECTION</div>
+                </div>
+                <button onclick="toggleCart()" class="text-2xl text-white/40 hover:text-white">×</button>
+            </div>
+            
+            <div id="cart-items" class="flex-1 overflow-auto p-8 space-y-5 text-sm">
+                <!-- JS injected -->
+            </div>
+            
+            <div class="p-8 border-t border-white/10 bg-black/50">
+                <div class="flex justify-between items-baseline mb-6">
+                    <div class="text-white/70">Total</div>
+                    <div>
+                        <span id="cart-total" class="text-4xl font-semibold">$0</span>
+                    </div>
+                </div>
+                
+                <button onclick="completeForge()" 
+                        class="premium-btn w-full py-[17px] bg-white text-black font-semibold rounded-3xl flex items-center justify-center gap-x-2 text-base hover:bg-emerald-400">
+                    <span>COMPLETE YOUR FORGE</span>
+                </button>
+                
+                <div class="text-center text-xs mt-4 text-white/40">30-day freshness guarantee • Secure checkout</div>
+            </div>
+        </div>
+    </div>
 
-DESCRIPTION
+    <!-- STRAIN MATCHER MODAL -->
+    <div id="matcher-modal" onclick="if (event.target.id === 'matcher-modal') hideMatcher()" 
+         class="hidden fixed inset-0 z-[120] bg-black/90 flex items-center justify-center p-6">
+        <div onclick="event.stopImmediatePropagation()" class="modal max-w-lg w-full bg-[#111] rounded-3xl border border-emerald-500/30 overflow-hidden">
+            
+            <div class="px-8 pt-8 pb-6">
+                <div class="flex justify-between">
+                    <div>
+                        <span class="px-3 py-1 text-xs font-bold bg-emerald-500 text-black rounded">AI RECOMMENDER</span>
+                        <div class="mt-3 text-3xl font-semibold">Strain Matcher</div>
+                    </div>
+                    <button onclick="hideMatcher()" class="text-white/40 hover:text-white">×</button>
+                </div>
+                
+                <div id="matcher-step-1" class="mt-8">
+                    <div class="text-sm text-white/50 mb-4">What is your primary goal today?</div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div onclick="selectPreference(this, 'relax', 1)" class="preference-btn p-5 border border-white/10 rounded-2xl hover:border-emerald-500 cursor-pointer flex flex-col items-center justify-center gap-y-3 text-center">
+                            <i class="fa-solid fa-spa text-3xl text-emerald-400"></i>
+                            <div>
+                                <div class="font-semibold">Deep Relaxation</div>
+                                <div class="text-xs text-white/50">Unwind &amp; restore</div>
+                            </div>
+                        </div>
+                        <div onclick="selectPreference(this, 'focus', 1)" class="preference-btn p-5 border border-white/10 rounded-2xl hover:border-emerald-500 cursor-pointer flex flex-col items-center justify-center gap-y-3 text-center">
+                            <i class="fa-solid fa-lightbulb text-3xl text-amber-400"></i>
+                            <div>
+                                <div class="font-semibold">Laser Focus</div>
+                                <div class="text-xs text-white/50">Creative work mode</div>
+                            </div>
+                        </div>
+                        <div onclick="selectPreference(this, 'creative', 1)" class="preference-btn p-5 border border-white/10 rounded-2xl hover:border-emerald-500 cursor-pointer flex flex-col items-center justify-center gap-y-3 text-center">
+                            <i class="fa-solid fa-palette text-3xl text-violet-400"></i>
+                            <div>
+                                <div class="font-semibold">Creative Flow</div>
+                                <div class="text-xs text-white/50">Art &amp; inspiration</div>
+                            </div>
+                        </div>
+                        <div onclick="selectPreference(this, 'euphoric', 1)" class="preference-btn p-5 border border-white/10 rounded-2xl hover:border-emerald-500 cursor-pointer flex flex-col items-center justify-center gap-y-3 text-center">
+                            <i class="fa-solid fa-grin-hearts text-3xl text-rose-400"></i>
+                            <div>
+                                <div class="font-semibold">Social Vibes</div>
+                                <div class="text-xs text-white/50">Elevate the moment</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="matcher-step-2" class="hidden mt-8">
+                    <div class="text-sm text-white/50 mb-4">Preferred THC potency?</div>
+                    <div class="space-y-3">
+                        <div onclick="selectPreference(this, 'high-thc', 2)" class="preference-btn flex justify-between items-center border border-white/10 hover:border-emerald-500 p-4 rounded-2xl cursor-pointer">
+                            <div>High (28%+)</div>
+                            <div class="text-xs px-3 py-px bg-white/10 rounded">Intense</div>
+                        </div>
+                        <div onclick="selectPreference(this, 'med-thc', 2)" class="preference-btn flex justify-between items-center border border-white/10 hover:border-emerald-500 p-4 rounded-2xl cursor-pointer">
+                            <div>Medium (22–27%)</div>
+                            <div class="text-xs px-3 py-px bg-white/10 rounded">Balanced</div>
+                        </div>
+                        <div onclick="selectPreference(this, 'low-thc', 2)" class="preference-btn flex justify-between items-center border border-white/10 hover:border-emerald-500 p-4 rounded-2xl cursor-pointer">
+                            <div>Lower (18–21%)</div>
+                            <div class="text-xs px-3 py-px bg-white/10 rounded">Functional</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="matcher-step-3" class="hidden mt-8">
+                    <div class="text-sm text-white/50 mb-4">When will you consume?</div>
+                    <div class="flex gap-3">
+                        <div onclick="selectPreference(this, 'evening', 3)" class="preference-btn flex-1 text-center border border-white/10 hover:border-emerald-500 p-4 rounded-2xl cursor-pointer">
+                            <i class="fa-solid fa-moon mb-2 block text-2xl"></i>
+                            <div class="text-sm">Evening / Night</div>
+                        </div>
+                        <div onclick="selectPreference(this, 'daytime', 3)" class="preference-btn flex-1 text-center border border-white/10 hover:border-emerald-500 p-4 rounded-2xl cursor-pointer">
+                            <i class="fa-solid fa-sun mb-2 block text-2xl"></i>
+                            <div class="text-sm">Daytime / Afternoon</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="matcher-results" class="hidden mt-6">
+                    <div class="text-center mb-6">
+                        <div class="mx-auto w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center mb-4">
+                            <i class="fa-solid fa-magic text-3xl text-emerald-400"></i>
+                        </div>
+                        <div class="text-xl font-semibold">Your matches are ready.</div>
+                        <div class="text-sm text-white/60">Based on your preferences, here are your top recommendations:</div>
+                    </div>
+                    
+                    <div id="matcher-recommendations" class="space-y-3">
+                        <!-- Populated dynamically -->
+                    </div>
+                    
+                    <div class="mt-8 flex gap-3">
+                        <button onclick="addRecommendationsToCart()" 
+                                class="flex-1 py-3 bg-emerald-500 text-black font-semibold rounded-3xl">ADD ALL TO FORGE</button>
+                        <button onclick="hideMatcher()" 
+                                class="flex-1 py-3 border border-white/30 font-semibold rounded-3xl">DONE</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="px-8 py-5 border-t border-white/10 flex justify-between items-center bg-black/30">
+                <div class="flex items-center gap-x-2 text-xs">
+                    <div class="px-2 py-px bg-emerald-500 text-black rounded text-[10px]">STEP <span id="step-number">1</span>/3</div>
+                </div>
+                <div>
+                    <button id="next-btn" onclick="nextMatcherStep()" 
+                            class="px-6 py-2 text-sm font-medium bg-white/10 hover:bg-white/20 rounded-2xl">NEXT</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-/ ⅛ oz
-IN STOCK
-42 units remaining
-ADD TO MY FORGE
-Free same-day delivery in Sonoma County
-My Forge
-YOUR CURATED SELECTION
-×
-
-Total
-$0
-COMPLETE YOUR FORGE
-30-day freshness guarantee • Secure checkout
-AI RECOMMENDER
-Strain Matcher
-×
-What is your primary goal today?
-Deep Relaxation
-Unwind & restore
-Laser Focus
-Creative work mode
-Creative Flow
-Art & inspiration
-Social Vibes
-Elevate the moment
-Preferred THC potency?
-High (28%+)
-Intense
-Medium (22–27%)
-Balanced
-Lower (18–21%)
-Functional
-When will you consume?
-Evening / Night
-Daytime / Afternoon
-
-Your matches are ready.
-Based on your preferences, here are your top recommendations:
-
-ADD ALL TO FORGE DONE
-STEP 1/3
-NEXT
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Tailwind script
+        function initializeTailwind() {
+            document.documentElement.style.setProperty('--accent', '#10b981');
+            
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            'serif-custom': ['Playfair Display', 'Georgia', 'serif']
+                        }
+                    }
+                }
+            };
+        }
+        
+        // Strain Data - Premium Niche Collection
+        let strains = [
+            {
+                id: 1,
+                name: "Velvet Eclipse",
+                type: "indica",
+                thc: 30,
+                cbd: 1,
+                terps: "Myrcene • Linalool • Caryophyllene",
+                price: 92,
+                effects: ["relax", "sedative"],
+                desc: "A deeply sedative indica forged from rare Purple Punch genetics. Notes of blackberry jam, incense, and dark chocolate. Perfect for deep rest and recovery.",
+                subtitle: "Limited Release #47 — Purple Punch x Kush Mints",
+                image: "https://picsum.photos/id/106/600/400",
+                location: "Sonoma Hills, Block 12"
+            },
+            {
+                id: 2,
+                name: "Solar Flare",
+                type: "sativa",
+                thc: 27,
+                cbd: 0.5,
+                terps: "Limonene • Pinene • Terpinolene",
+                price: 78,
+                effects: ["focus", "euphoric"],
+                desc: "Electric sativa with bright citrus and tropical mango. Clean, energetic head high perfect for daytime creativity and social engagement without anxiety.",
+                subtitle: "Jack Herer x Tangie — 2025 Phenotype",
+                image: "https://picsum.photos/id/1015/600/400",
+                location: "Dry Creek Valley"
+            },
+            {
+                id: 3,
+                name: "Phantom Whisper",
+                type: "hybrid",
+                thc: 26,
+                cbd: 2,
+                terps: "Caryophyllene • Humulene • Myrcene",
+                price: 85,
+                effects: ["creative", "relax"],
+                desc: "Balanced hybrid that whispers creativity while gently relaxing the body. Earthy pine and sweet berry with a long, smooth finish. Ideal for evening sessions.",
+                subtitle: "Gelato #33 x OG Kush — Small Batch",
+                image: "https://picsum.photos/id/107/600/400",
+                location: "Russian River Valley"
+            },
+            {
+                id: 4,
+                name: "Golden Veil",
+                type: "sativa",
+                thc: 24,
+                cbd: 1,
+                terps: "Limonene • Ocimene • Myrcene",
+                price: 68,
+                effects: ["focus", "euphoric"],
+                desc: "Uplifting sativa-dominant hybrid with vibrant lemon zest and honeysuckle. Clean cerebral high that enhances conversation and artistic flow.",
+                subtitle: "Sour Diesel x Lemon Haze",
+                image: "https://picsum.photos/id/201/600/400",
+                location: "Alexander Valley"
+            },
+            {
+                id: 5,
+                name: "Obsidian Bloom",
+                type: "indica",
+                thc: 32,
+                cbd: 0.8,
+                terps: "Myrcene • Linalool • Pinene",
+                price: 98,
+                effects: ["relax", "sedative"],
+                desc: "Our most potent indica. Heavy body melt with sweet grape and black licorice. Designed for profound relaxation and sleep support.",
+                subtitle: "Granddaddy Purple x Blue Dream",
+                image: "https://picsum.photos/id/1036/600/400",
+                location: "Sonoma Mountain"
+            },
+            {
+                id: 6,
+                name: "Ember Grove",
+                type: "hybrid",
+                thc: 25,
+                cbd: 3,
+                terps: "Caryophyllene • Limonene • Terpinolene",
+                price: 82,
+                effects: ["creative", "focus"],
+                desc: "A vibrant hybrid with spicy-sweet undertones and a clear, motivating effect. Excellent for productive afternoons and light physical activity.",
+                subtitle: "Wedding Cake x MAC 1",
+                image: "https://picsum.photos/id/160/600/400",
+                location: "West Sonoma Coast"
+            },
+            {
+                id: 7,
+                name: "Lunar Haze",
+                type: "indica",
+                thc: 29,
+                cbd: 1.5,
+                terps: "Linalool • Myrcene • Humulene",
+                price: 88,
+                effects: ["relax", "sedative"],
+                desc: "Floral and calming indica with lavender and chamomile notes. Exceptional for stress relief and winding down after long days.",
+                subtitle: "LA Confidential x Afghan Kush",
+                image: "https://picsum.photos/id/251/600/400",
+                location: "Bennett Valley"
+            },
+            {
+                id: 8,
+                name: "Citrus Reverie",
+                type: "sativa",
+                thc: 23,
+                cbd: 2,
+                terps: "Limonene • Pinene • Caryophyllene",
+                price: 72,
+                effects: ["focus", "euphoric", "creative"],
+                desc: "Bright, zesty sativa that delivers pure motivation and mental clarity. Mandarin orange and fresh pine with a sparkling, euphoric finish.",
+                subtitle: "Super Lemon Haze x Durban Poison",
+                image: "https://picsum.photos/id/292/600/400",
+                location: "Green Valley"
+            }
+        ]
+        
+        let cart = []
+        let currentFilters = {
+            type: 'all',
+            effects: [],
+            search: '',
+            sort: 'featured',
+            thcMin: 18,
+            thcMax: 32
+        }
+        let currentStrain = null
+        let matcherState = {
+            step: 1,
+            preferences: {}
+        }
+        
+        // Render all strains
+        function renderStrains(filteredStrains) {
+            const grid = document.getElementById('strain-grid')
+            grid.innerHTML = ''
+            
+            if (!filteredStrains || filteredStrains.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-16 text-center">
+                        <i class="fa-solid fa-search text-4xl text-white/20 mb-4"></i>
+                        <p class="text-white/60">No strains match your current filters.</p>
+                        <button onclick="resetFilters()" class="mt-4 text-emerald-400 text-sm underline">Clear all filters</button>
+                    </div>
+                `
+                return
+            }
+            
+            filteredStrains.forEach(strain => {
+                const card = document.createElement('div')
+                card.className = `strain-card bg-[#111] border border-white/10 rounded-3xl overflow-hidden group cursor-pointer`
+                
+                const typeColor = strain.type === 'indica' ? 'violet' : 
+                                 strain.type === 'sativa' ? 'amber' : 'sky'
+                
+                card.innerHTML = `
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="${strain.image}" class="product-image w-full h-full object-cover" alt="${strain.name}">
+                        
+                        <div class="absolute top-4 right-4">
+                            <div class="px-3 py-px text-xs font-bold uppercase tracking-wider bg-black/70 text-white rounded-full flex items-center gap-x-1">
+                                <span class="w-1.5 h-1.5 bg-${typeColor}-400 rounded-full"></span>
+                                <span>${strain.type}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                            <div>
+                                <div class="font-mono text-xs text-white/60">THC ${strain.thc}%</div>
+                                <div class="text-2xl font-semibold tracking-tighter">${strain.name}</div>
+                            </div>
+                            
+                            <div class="text-right">
+                                <div class="font-semibold text-lg">$${strain.price}</div>
+                                <div class="text-xs -mt-1 text-white/50">per ⅛</div>
+                            </div>
+                        </div>
+                        
+                        <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/90 to-transparent"></div>
+                    </div>
+                    
+                    <div class="p-5">
+                        <div class="flex items-center justify-between text-xs">
+                            <div class="flex items-center gap-x-1 text-emerald-400">
+                                <i class="fa-solid fa-leaf"></i>
+                                <span class="font-medium">${strain.terps.split(' • ')[0]}</span>
+                            </div>
+                            
+                            <div class="text-white/50">${strain.cbd}% CBD</div>
+                        </div>
+                        
+                        <div class="mt-4 flex items-center justify-between">
+                            <button onclick="event.stopImmediatePropagation(); showStrainModal(${strain.id});" 
+                                    class="text-xs px-5 py-2 rounded-2xl border border-white/20 hover:bg-white/5 transition-colors">
+                                DETAILS
+                            </button>
+                            
+                            <button onclick="event.stopImmediatePropagation(); addToCart(${strain.id});" 
+                                    class="text-xs px-6 py-2 bg-emerald-500 text-black font-semibold rounded-2xl flex items-center gap-x-2 hover:bg-emerald-400 active:scale-[0.985] transition-all">
+                                <span>ADD TO FORGE</span>
+                            </button>
+                        </div>
+                    </div>
+                `
+                
+                card.onclick = () => showStrainModal(strain.id)
+                grid.appendChild(card)
+            })
+            
+            document.getElementById('results-count').innerText = filteredStrains.length
+        }
+        
+        // Filter function
+        function filterStrains() {
+            const searchVal = document.getElementById('search-input').value.toLowerCase().trim()
+            const sortVal = document.getElementById('sort-select').value
+            const thcMin = parseInt(document.getElementById('thc-min').value)
+            const thcMax = parseInt(document.getElementById('thc-max').value)
+            
+            currentFilters.search = searchVal
+            currentFilters.sort = sortVal
+            currentFilters.thcMin = thcMin
+            currentFilters.thcMax = thcMax
+            
+            let filtered = strains.filter(strain => {
+                // Type filter
+                if (currentFilters.type !== 'all' && strain.type !== currentFilters.type) return false
+                
+                // THC range
+                if (strain.thc < currentFilters.thcMin || strain.thc > currentFilters.thcMax) return false
+                
+                // Search
+                if (searchVal && !strain.name.toLowerCase().includes(searchVal) && 
+                    !strain.desc.toLowerCase().includes(searchVal) && 
+                    !strain.terps.toLowerCase().includes(searchVal)) {
+                    return false
+                }
+                
+                // Effects filter
+                if (currentFilters.effects.length > 0) {
+                    const hasEffect = currentFilters.effects.some(effect => strain.effects.includes(effect))
+                    if (!hasEffect) return false
+                }
+                
+                return true
+            })
+            
+            // Sort
+            filtered.sort((a, b) => {
+                if (sortVal === 'thc-high') return b.thc - a.thc
+                if (sortVal === 'thc-low') return a.thc - b.thc
+                if (sortVal === 'price-low') return a.price - b.price
+                if (sortVal === 'price-high') return b.price - a.price
+                // featured: random but stable order by id
+                return a.id - b.id
+            })
+            
+            renderStrains(filtered)
+        }
+        
+        function setTypeFilter(type) {
+            // Deselect all
+            document.querySelectorAll('[id^="filter-"]').forEach(el => el.classList.remove('active', 'bg-emerald-500', 'text-white'))
+            
+            const activeEl = document.getElementById(`filter-${type}`)
+            if (activeEl) {
+                activeEl.classList.add('active', 'bg-emerald-500', 'text-white')
+            } else {
+                document.getElementById('filter-all').classList.add('active', 'bg-emerald-500', 'text-white')
+            }
+            
+            currentFilters.type = type
+            filterStrains()
+        }
+        
+        function toggleEffect(element, effect) {
+            element.classList.toggle('active')
+            element.classList.toggle('!border-emerald-500')
+            element.classList.toggle('bg-emerald-500/10')
+            
+            if (currentFilters.effects.includes(effect)) {
+                currentFilters.effects = currentFilters.effects.filter(e => e !== effect)
+            } else {
+                currentFilters.effects.push(effect)
+            }
+            
+            filterStrains()
+        }
+        
+        function resetFilters() {
+            currentFilters = {
+                type: 'all',
+                effects: [],
+                search: '',
+                sort: 'featured',
+                thcMin: 18,
+                thcMax: 32
+            }
+            
+            document.getElementById('search-input').value = ''
+            document.getElementById('sort-select').value = 'featured'
+            document.getElementById('thc-min').value = 18
+            document.getElementById('thc-max').value = 32
+            document.getElementById('thc-value').innerText = '18–32%'
+            
+            // Reset chips
+            document.querySelectorAll('.filter-chip').forEach(el => el.classList.remove('active', 'bg-emerald-500', 'text-white'))
+            document.getElementById('filter-all').classList.add('active', 'bg-emerald-500', 'text-white')
+            
+            document.querySelectorAll('.effect-chip').forEach(el => {
+                el.classList.remove('active', '!border-emerald-500', 'bg-emerald-500/10')
+            })
+            
+            filterStrains()
+        }
+        
+        // Modal functions
+        function showStrainModal(id) {
+            currentStrain = strains.find(s => s.id === id)
+            if (!currentStrain) return
+            
+            document.getElementById('modal-image').src = currentStrain.image
+            document.getElementById('modal-name').innerText = currentStrain.name
+            document.getElementById('modal-subtitle').innerText = currentStrain.subtitle
+            document.getElementById('modal-thc').innerHTML = `${currentStrain.thc}<span class="text-base align-super">%</span>`
+            document.getElementById('modal-cbd').innerHTML = `${currentStrain.cbd}<span class="text-base align-super">%</span>`
+            document.getElementById('modal-terps').innerText = currentStrain.terps
+            document.getElementById('modal-desc').innerText = currentStrain.desc
+            document.getElementById('modal-price').innerText = `$${currentStrain.price}`
+            document.getElementById('modal-location').innerText = currentStrain.location
+            
+            // Type badge
+            const badgeContainer = document.getElementById('modal-type-badge')
+            const typeColor = currentStrain.type === 'indica' ? 'violet' : currentStrain.type === 'sativa' ? 'amber' : 'sky'
+            badgeContainer.innerHTML = `
+                <span class="px-3.5 py-1 rounded-2xl text-xs font-bold uppercase flex items-center gap-x-2 bg-${typeColor}-500/20 text-${typeColor}-300">
+                    <span class="w-1.5 h-1.5 bg-${typeColor}-400 rounded-full"></span>
+                    ${currentStrain.type.toUpperCase()}
+                </span>
+            `
+            
+            document.getElementById('product-modal').classList.remove('hidden')
+            document.getElementById('product-modal').classList.add('flex')
+        }
+        
+        function hideModal() {
+            const modal = document.getElementById('product-modal')
+            modal.classList.remove('flex')
+            modal.classList.add('hidden')
+        }
+        
+        // Cart functions
+        function addToCart(id) {
+            const strain = strains.find(s => s.id === id)
+            if (!strain) return
+            
+            // Check if already in cart
+            if (cart.find(item => item.id === id)) {
+                const notif = document.createElement('div')
+                notif.className = `fixed bottom-6 right-6 bg-white text-black px-6 py-3 rounded-2xl shadow-xl flex items-center gap-x-3 z-[200]`
+                notif.innerHTML = `
+                    <span>Already in your Forge</span>
+                `
+                document.body.appendChild(notif)
+                setTimeout(() => {
+                    notif.style.transition = 'all 0.3s'
+                    notif.style.opacity = '0'
+                    setTimeout(() => notif.remove(), 300)
+                }, 1400)
+                return
+            }
+            
+            cart.push({...strain})
+            updateCartUI()
+            
+            // Toast notification
+            const toast = document.createElement('div')
+            toast.className = `fixed bottom-8 right-8 bg-emerald-600 text-white px-6 py-3.5 rounded-3xl shadow-2xl flex items-center gap-x-3 z-[200]`
+            toast.innerHTML = `
+                <div class="flex items-center gap-x-3">
+                    <i class="fa-solid fa-check-circle"></i>
+                    <span><strong>${strain.name}</strong> added to Forge</span>
+                </div>
+            `
+            document.body.appendChild(toast)
+            
+            setTimeout(() => {
+                toast.style.transition = 'all .35s cubic-bezier(0.4,0,1,1)'
+                toast.style.opacity = '0'
+                toast.style.transform = 'translateY(15px)'
+                setTimeout(() => toast.remove(), 300)
+            }, 1800)
+        }
+        
+        function addCurrentToCart() {
+            if (currentStrain) {
+                addToCart(currentStrain.id)
+                hideModal()
+            }
+        }
+        
+        function updateCartUI() {
+            const countEl = document.getElementById('cart-count')
+            countEl.innerText = cart.length
+            
+            const container = document.getElementById('cart-items')
+            container.innerHTML = ''
+            
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-center py-12">
+                        <i class="fa-solid fa-shopping-bag text-5xl text-white/10 mb-4"></i>
+                        <div class="text-white/60">Your Forge is empty</div>
+                        <div class="text-xs text-white/40 mt-1">Add strains from the collection</div>
+                    </div>
+                `
+                document.getElementById('cart-total').innerText = '$0'
+                return
+            }
+            
+            let total = 0
+            cart.forEach((item, index) => {
+                total += item.price
+                
+                const div = document.createElement('div')
+                div.className = `flex gap-x-4 border-b border-white/10 pb-5 last:border-none last:pb-0`
+                div.innerHTML = `
+                    <div class="w-16 h-16 flex-shrink-0 rounded-2xl overflow-hidden border border-white/10">
+                        <img src="${item.image}" class="w-full h-full object-cover" alt="">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between">
+                            <div>
+                                <div class="font-semibold">${item.name}</div>
+                                <div class="text-xs text-emerald-400">${item.type} • ${item.thc}% THC</div>
+                            </div>
+                            <div class="text-right font-medium">$${item.price}</div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between mt-4">
+                            <div onclick="removeFromCart(${index})" class="cursor-pointer text-xs text-red-400 hover:text-red-500 flex items-center gap-x-1">
+                                <i class="fa-solid fa-trash"></i>
+                                <span class="text-[10px]">REMOVE</span>
+                            </div>
+                            
+                            <div class="text-xs text-white/50">1 × ⅛ oz</div>
+                        </div>
+                    </div>
+                `
+                container.appendChild(div)
+            })
+            
+            document.getElementById('cart-total').innerText = `$${total}`
+        }
+        
+        function removeFromCart(index) {
+            cart.splice(index, 1)
+            updateCartUI()
+        }
+        
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar')
+            if (sidebar.classList.contains('hidden')) {
+                sidebar.classList.remove('hidden')
+                sidebar.classList.add('flex')
+                updateCartUI()
+            } else {
+                sidebar.classList.add('hidden')
+                sidebar.classList.remove('flex')
+            }
+        }
+        
+        function completeForge() {
+            if (cart.length === 0) return
+            
+            const sidebar = document.getElementById('cart-sidebar')
+            sidebar.classList.add('hidden')
+            sidebar.classList.remove('flex')
+            
+            const total = cart.reduce((sum, item) => sum + item.price, 0)
+            
+            const successModal = document.createElement('div')
+            successModal.className = `fixed inset-0 z-[130] bg-black/90 flex items-center justify-center p-6`
+            successModal.innerHTML = `
+                <div class="max-w-md w-full bg-[#111] border border-emerald-500/30 rounded-3xl p-10 text-center">
+                    <div class="mx-auto w-20 h-20 rounded-full bg-emerald-500 flex items-center justify-center mb-8">
+                        <i class="fa-solid fa-check text-5xl text-black"></i>
+                    </div>
+                    
+                    <div class="text-4xl font-semibold tracking-tight">Forge Complete.</div>
+                    <div class="mt-3 text-lg text-white/70">Your selection has been confirmed.</div>
+                    
+                    <div class="my-8 py-6 border-y border-white/10 text-left text-sm">
+                        <div class="flex justify-between py-1"><span class="text-white/60">Order #</span> <span class="font-mono">SF-2026-${Math.floor(100000 + Math.random() * 900000)}</span></div>
+                        <div class="flex justify-between py-1"><span class="text-white/60">Items</span> <span>${cart.length} strains</span></div>
+                        <div class="flex justify-between py-1"><span class="text-white/60">Total</span> <span class="font-semibold">$${total}</span></div>
+                        <div class="flex justify-between py-1"><span class="text-white/60">Delivery</span> <span class="text-emerald-400">Today • 2–4pm</span></div>
+                    </div>
+                    
+                    <div class="text-xs text-white/50">A confirmation has been sent to your email.<br>Thank you for choosing Sonoma Forge.</div>
+                    
+                    <button onclick="this.closest('.fixed').remove(); resetAfterPurchase()" 
+                            class="mt-8 w-full py-4 bg-white text-black font-semibold rounded-3xl">RETURN TO COLLECTION</button>
+                </div>
+            `
+            document.body.appendChild(successModal)
+        }
+        
+        function resetAfterPurchase() {
+            cart = []
+            document.getElementById('cart-count').innerText = '0'
+        }
+        
+        // Strain Matcher
+        function showMatcher() {
+            const modal = document.getElementById('matcher-modal')
+            modal.classList.remove('hidden')
+            modal.classList.add('flex')
+            
+            // Reset state
+            matcherState = { step: 1, preferences: {} }
+            document.getElementById('matcher-step-1').classList.remove('hidden')
+            document.getElementById('matcher-step-2').classList.add('hidden')
+            document.getElementById('matcher-step-3').classList.add('hidden')
+            document.getElementById('matcher-results').classList.add('hidden')
+            document.getElementById('step-number').innerText = '1'
+            
+            // Clear any previous selections
+            document.querySelectorAll('.preference-btn').forEach(el => {
+                el.classList.remove('!border-emerald-500', 'bg-emerald-500/10')
+            })
+            
+            document.getElementById('next-btn').innerText = 'NEXT'
+            document.getElementById('next-btn').onclick = nextMatcherStep
+        }
+        
+        function hideMatcher() {
+            document.getElementById('matcher-modal').classList.add('hidden')
+            document.getElementById('matcher-modal').classList.remove('flex')
+        }
+        
+        function selectPreference(element, value, step) {
+            // Deselect siblings
+            const siblings = element.parentElement.children
+            for (let i = 0; i < siblings.length; i++) {
+                siblings[i].classList.remove('!border-emerald-500', 'bg-emerald-500/10')
+            }
+            
+            element.classList.add('!border-emerald-500', 'bg-emerald-500/10')
+            
+            matcherState.preferences[`step${step}`] = value
+        }
+        
+        function nextMatcherStep() {
+            const currentStepEl = document.getElementById(`matcher-step-${matcherState.step}`)
+            const nextStep = matcherState.step + 1
+            
+            if (nextStep <= 3) {
+                currentStepEl.classList.add('hidden')
+                document.getElementById(`matcher-step-${nextStep}`).classList.remove('hidden')
+                
+                matcherState.step = nextStep
+                document.getElementById('step-number').innerText = nextStep
+                
+                if (nextStep === 3) {
+                    document.getElementById('next-btn').innerText = 'GET RECOMMENDATIONS'
+                }
+            } else {
+                // Show results
+                showMatcherResults()
+            }
+        }
+        
+        function showMatcherResults() {
+            document.getElementById('matcher-step-3').classList.add('hidden')
+            document.getElementById('matcher-results').classList.remove('hidden')
+            document.getElementById('next-btn').classList.add('hidden')
+            
+            const prefs = matcherState.preferences
+            let recommendations = []
+            
+            // Simple recommendation logic
+            const primaryGoal = prefs.step1
+            const thcPref = prefs.step2
+            const timePref = prefs.step3
+            
+            // Score each strain
+            strains.forEach(strain => {
+                let score = 0
+                
+                // Effect match
+                if (primaryGoal === 'relax' && strain.effects.includes('relax')) score += 40
+                if (primaryGoal === 'focus' && strain.effects.includes('focus')) score += 40
+                if (primaryGoal === 'creative' && strain.effects.includes('creative')) score += 40
+                if (primaryGoal === 'euphoric' && strain.effects.includes('euphoric')) score += 35
+                
+                // THC match
+                if (thcPref === 'high-thc' && strain.thc >= 28) score += 30
+                if (thcPref === 'med-thc' && strain.thc >= 22 && strain.thc <= 27) score += 30
+                if (thcPref === 'low-thc' && strain.thc < 23) score += 25
+                
+                // Time match
+                if (timePref === 'evening' && strain.type === 'indica') score += 25
+                if (timePref === 'daytime' && (strain.type === 'sativa' || strain.type === 'hybrid')) score += 25
+                
+                // Bonus for balanced hybrids
+                if (strain.type === 'hybrid') score += 8
+                
+                recommendations.push({strain, score})
+            })
+            
+            // Sort by score
+            recommendations.sort((a, b) => b.score - a.score)
+            const top3 = recommendations.slice(0, 3)
+            
+            const container = document.getElementById('matcher-recommendations')
+            container.innerHTML = ''
+            
+            top3.forEach((rec, idx) => {
+                const el = document.createElement('div')
+                el.className = `flex items-center gap-4 p-4 border border-white/10 rounded-2xl hover:border-emerald-500/50 cursor-pointer`
+                el.innerHTML = `
+                    <div class="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 border border-white/10">
+                        <img src="${rec.strain.image}" class="w-full h-full object-cover" alt="">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="font-semibold">${rec.strain.name}</div>
+                                <div class="text-xs text-emerald-400">${rec.strain.type.toUpperCase()} • ${rec.strain.thc}% THC</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-emerald-400 font-medium">${rec.score}% match</div>
+                                <div class="font-semibold text-sm">$${rec.strain.price}</div>
+                            </div>
+                        </div>
+                    </div>
+                `
+                el.onclick = () => {
+                    hideMatcher()
+                    setTimeout(() => {
+                        showStrainModal(rec.strain.id)
+                    }, 350)
+                }
+                container.appendChild(el)
+            })
+            
+            // Store recommendations for "add all" button
+            window.currentRecommendations = top3.map(r => r.strain)
+        }
+        
+        function addRecommendationsToCart() {
+            if (!window.currentRecommendations) return
+            
+            window.currentRecommendations.forEach(strain => {
+                if (!cart.find(item => item.id === strain.id)) {
+                    cart.push({...strain})
+                }
+            })
+            
+            updateCartUI()
+            hideMatcher()
+            
+            // Show toast
+            setTimeout(() => {
+                const toast = document.createElement('div')
+                toast.className = `fixed bottom-8 right-8 bg-emerald-600 px-7 py-4 rounded-3xl shadow-xl flex items-center gap-3 z-[200]`
+                toast.innerHTML = `<span>Recommendations added to your Forge</span>`
+                document.body.appendChild(toast)
+                
+                setTimeout(() => {
+                    toast.style.transition = 'all 0.4s ease'
+                    toast.style.opacity = '0'
+                    setTimeout(() => toast.remove(), 300)
+                }, 1700)
+            }, 600)
+        }
+        
+        // THC slider sync
+        function setupSliders() {
+            const minSlider = document.getElementById('thc-min')
+            const maxSlider = document.getElementById('thc-max')
+            const valueDisplay = document.getElementById('thc-value')
+            
+            function updateDisplay() {
+                const min = parseInt(minSlider.value)
+                const max = parseInt(maxSlider.value)
+                
+                if (min > max) {
+                    if (minSlider === document.activeElement) {
+                        maxSlider.value = min
+                    } else {
+                        minSlider.value = max
+                    }
+                }
+                
+                valueDisplay.innerText = `${minSlider.value}–${maxSlider.value}%`
+                filterStrains()
+            }
+            
+            minSlider.addEventListener('input', updateDisplay)
+            maxSlider.addEventListener('input', updateDisplay)
+            
+            // Initial
+            valueDisplay.innerText = `${minSlider.value}–${maxSlider.value}%`
+        }
+        
+        // Keyboard shortcuts
+        function setupKeyboard() {
+            document.addEventListener('keydown', function(e) {
+                if (e.key === '/' && document.activeElement.tagName === 'BODY') {
+                    e.preventDefault()
+                    document.getElementById('search-input').focus()
+                }
+                
+                if (e.metaKey && e.key === 'k') {
+                    e.preventDefault()
+                    showMatcher()
+                }
+            })
+            
+            // Click anywhere to close modals (already handled)
+        }
+        
+        // Initialize everything
+        function initialize() {
+            initializeTailwind()
+            
+            // Render initial strains
+            renderStrains(strains)
+            
+            // Set initial active filter
+            document.getElementById('filter-all').classList.add('active', 'bg-emerald-500', 'text-white')
+            
+            // Setup sliders
+            setupSliders()
+            
+            // Keyboard
+            setupKeyboard()
+            
+            // Initial cart count
+            document.getElementById('cart-count').innerText = '0'
+            
+            // Random tip every 45s
+            setTimeout(() => {
+                if (!document.getElementById('product-modal').classList.contains('hidden') && 
+                    !document.getElementById('matcher-modal').classList.contains('hidden')) {
+                    // do nothing if modal open
+                } else {
+                    const tip = document.createElement('div')
+                    tip.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);'
+                    tip.className = `px-5 py-2 bg-white/5 backdrop-blur border border-white/10 text-xs rounded-3xl flex items-center gap-x-2 shadow-xl`
+                    tip.innerHTML = `
+                        <span>Pro tip: Press <span class="font-mono px-1.5 py-px bg-white/10 rounded">/</span> to search strains</span>
+                    `
+                    document.body.appendChild(tip)
+                    
+                    setTimeout(() => {
+                        tip.style.transition = 'opacity .4s'
+                        tip.style.opacity = '0'
+                        setTimeout(() => tip.remove(), 300)
+                    }, 4200)
+                }
+            }, 45000)
+            
+            // Easter egg: Konami code for "forge mode"
+            let konami = []
+            const konamiCode = [38,38,40,40,37,39,37,39,66,65]
+            document.addEventListener('keydown', function(e) {
+                konami.push(e.keyCode)
+                if (konami.length > 10) konami.shift()
+                if (konami.join(',') === konamiCode.join(',')) {
+                    document.body.style.filter = 'hue-rotate(140deg) saturate(1.6)'
+                    setTimeout(() => {
+                        document.body.style.filter = 'none'
+                    }, 2400)
+                    konami = []
+                }
+            })
+            
+            // Welcome toast
+            setTimeout(() => {
+                const welcome = document.createElement('div')
+                welcome.className = `hidden md:block fixed bottom-6 left-6 px-5 py-2.5 bg-white/5 text-xs border border-white/10 rounded-3xl flex items-center gap-x-2`
+                welcome.innerHTML = `
+                    <span>Welcome back, David. Your last Forge was <span class="text-emerald-400">Velvet Eclipse</span>.</span>
+                `
+                document.body.appendChild(welcome)
+                
+                setTimeout(() => {
+                    welcome.style.transition = 'all 0.6s ease'
+                    welcome.style.opacity = '0'
+                    setTimeout(() => welcome.remove(), 500)
+                }, 5200)
+            }, 6200)
+            
+            console.log('%c[Sonoma Forge] Niche Marijuana Selection page initialized successfully.', 'color:#10b981')
+        }
+        
+        // Boot app
+        window.onload = initialize
+    </script>
+</body>
+</html>
