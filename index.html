@@ -3,38 +3,276 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SONOMA FORGE • Niche Cannabis Selection</title>
+    <title>Sonoma Pro Suite • Google + AI Ads + Lead Alerts</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=Inter:wght@300;400;500;600&amp;display=swap');
-        
-        :root {
-            --emerald: #10b981;
-        }
-        
-        body {
-            font-family: 'Inter', system_ui, sans-serif;
-        }
-        
-        .heading-serif {
-            font-family: 'Playfair Display', Georgia, serif;
-            font-weight: 700;
-            letter-spacing: -0.025em;
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center">
+                    <span class="text-white font-bold text-2xl">S</span>
+                </div>
+                <div>
+                    <span class="font-bold text-2xl tracking-tight">Sonoma Pro Suite</span>
+                </div>
+            </div>
+            
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+                <a href="#audit" class="hover:text-blue-600 transition">Google Audit</a>
+                <a href="#ads" class="hover:text-blue-600 transition">AI Ad Maker</a>
+                <a href="#leads" class="hover:text-blue-600 transition">Lead Alerts</a>
+                <a href="#assistant" class="hover:text-blue-600 transition">AI Assistant</a>
+            </div>
+            
+            <button onclick="showContact()"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-2xl text-sm font-semibold transition">
+                Get Started
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 text-white py-20">
+        <div class="max-w-5xl mx-auto px-6 text-center">
+            <div class="inline-flex items-center gap-2 bg-white/10 px-4 py-1 rounded-full text-sm mb-6">
+                <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                Built for Sonoma County Businesses
+            </div>
+            
+            <h1 class="text-6xl md:text-7xl font-bold leading-none tracking-tighter mb-6">
+                Google.<br>
+                Ads.<br>
+                Leads.
+            </h1>
+            <p class="text-2xl text-blue-200 max-w-2xl mx-auto mb-10">
+                One powerful system that helps you rank better, create memorable ads, and get leads on autopilot.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="document.getElementById('audit').scrollIntoView({ behavior: 'smooth' })" 
+                        class="bg-white text-slate-900 px-8 py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-gray-100 transition">
+                    <i class="fas fa-search"></i> Run Free Google Audit
+                </button>
+                <button onclick="document.getElementById('assistant').scrollIntoView({ behavior: 'smooth' })" 
+                        class="border border-white/60 hover:bg-white/10 px-8 py-4 rounded-2xl font-semibold text-lg transition">
+                    Try AI Assistant
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Business Audit -->
+    <div id="audit" class="max-w-5xl mx-auto px-6 py-16">
+        <div class="text-center mb-10">
+            <span class="bg-emerald-100 text-emerald-700 px-4 py-1 rounded-full text-sm font-semibold">FREE TOOL</span>
+            <h2 class="text-4xl font-bold mt-4">Google Business Profile Audit</h2>
+            <p class="text-xl text-gray-600 mt-2">Find out exactly why you're losing leads</p>
+        </div>
+
+        <div class="max-w-xl mx-auto bg-white rounded-3xl shadow-xl p-8">
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium mb-1.5">Business Name</label>
+                    <input id="biz-name" type="text" value="Sonoma Cool Air" class="w-full border border-gray-300 rounded-2xl px-4 py-3 focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1.5">Google Business Profile Link</label>
+                    <input id="gbp-link" type="text" placeholder="https://g.page/..." class="w-full border border-gray-300 rounded-2xl px-4 py-3 focus:outline-none focus:border-blue-500">
+                </div>
+                <button onclick="runGoogleAudit()" 
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 text-lg">
+                    <i class="fas fa-chart-line"></i> Run Free Audit
+                </button>
+            </div>
+
+            <!-- Results -->
+            <div id="audit-result" class="hidden mt-8 pt-8 border-t">
+                <div class="flex justify-between items-end mb-6">
+                    <div>
+                        <div class="text-sm text-gray-500">Overall Score</div>
+                        <div id="score-value" class="text-6xl font-bold text-emerald-600"></div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm">Last checked</div>
+                        <div class="font-medium">Just now</div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center"><span>Profile Completeness</span> <span id="score-complete" class="font-semibold"></span></div>
+                    <div class="flex justify-between items-center"><span>Review Management</span> <span id="score-reviews" class="font-semibold"></span></div>
+                    <div class="flex justify-between items-center"><span>Photo & Media</span> <span id="score-photos" class="font-semibold"></span></div>
+                    <div class="flex justify-between items-center"><span>Response Time</span> <span id="score-response" class="font-semibold"></span></div>
+                </div>
+
+                <div class="mt-6 bg-amber-50 border border-amber-200 p-5 rounded-2xl">
+                    <div class="font-semibold text-amber-800">Key Recommendation:</div>
+                    <div id="key-recommendation" class="text-amber-700 mt-1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Ad Maker -->
+    <div id="ads" class="bg-white py-16 border-t">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="text-center mb-10">
+                <h2 class="text-4xl font-bold">AI Ad Maker</h2>
+                <p class="text-xl text-gray-600 mt-2">Create funny or catchy ads in seconds</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Funny Style -->
+                <div onclick="generateAd('funny')" class="cursor-pointer border-2 border-gray-200 hover:border-orange-400 rounded-3xl p-8 transition">
+                    <div class="text-orange-500 text-4xl mb-4"><i class="fas fa-laugh-beam"></i></div>
+                    <h3 class="font-bold text-2xl">Funny Video Ads</h3>
+                    <p class="text-gray-600 mt-2">Tigran Gertz style — relatable, humorous, and memorable for local customers.</p>
+                    <div class="mt-4 text-orange-600 font-medium text-sm">Click to generate →</div>
+                </div>
+
+                <!-- Jingle Style -->
+                <div onclick="generateAd('jingle')" class="cursor-pointer border-2 border-gray-200 hover:border-purple-400 rounded-3xl p-8 transition">
+                    <div class="text-purple-500 text-4xl mb-4"><i class="fas fa-music"></i></div>
+                    <h3 class="font-bold text-2xl">Catchy Jingle Ads</h3>
+                    <p class="text-gray-600 mt-2">Empire 800-588-2300 style — simple, repetitive, and unforgettable.</p>
+                    <div class="mt-4 text-purple-600 font-medium text-sm">Click to generate →</div>
+                </div>
+            </div>
+
+            <div id="ad-result" class="hidden mt-8 bg-slate-900 text-white p-8 rounded-3xl font-mono text-sm whitespace-pre-line">
+                <div id="ad-content"></div>
+                <button onclick="copyAdText()" class="mt-4 text-blue-400 hover:text-blue-300 text-xs flex items-center gap-1">
+                    <i class="fas fa-copy"></i> Copy to clipboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lead Alerts -->
+    <div id="leads" class="max-w-5xl mx-auto px-6 py-16">
+        <div class="text-center mb-10">
+            <h2 class="text-4xl font-bold">Smart Lead Monitoring</h2>
+            <p class="text-xl text-gray-600 mt-2">16-hour daily alerts so you can focus on the work</p>
+        </div>
+
+        <div class="max-w-2xl mx-auto bg-white rounded-3xl shadow p-8">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <div class="font-semibold">Today's Opportunities</div>
+                    <div class="text-xs text-gray-500">Updated 11:52 AM</div>
+                </div>
+                <div class="text-right">
+                    <div class="text-5xl font-bold text-emerald-600">23</div>
+                    <div class="text-xs text-emerald-600">new leads found</div>
+                </div>
+            </div>
+
+            <div class="space-y-3 text-sm">
+                <div class="flex justify-between p-4 bg-gray-50 rounded-2xl">
+                    <div>"Emergency AC repair Santa Rosa"</div>
+                    <div class="font-medium text-emerald-600">+7</div>
+                </div>
+                <div class="flex justify-between p-4 bg-gray-50 rounded-2xl">
+                    <div>"Plumber near me Windsor"</div>
+                    <div class="font-medium text-emerald-600">+4</div>
+                </div>
+                <div class="flex justify-between p-4 bg-gray-50 rounded-2xl">
+                    <div>"Water heater replacement"</div>
+                    <div class="font-medium text-emerald-600">+12</div>
+                </div>
+            </div>
+
+            <div class="mt-6 text-center text-xs text-gray-500">
+                Runs automatically 16 hours/day • Morning summary sent to your email
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Assistant -->
+    <div id="assistant" class="bg-slate-900 text-white py-16">
+        <div class="max-w-3xl mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-4">Your AI Assistant</h2>
+            <p class="text-xl text-slate-300 mb-8">Ask about ads, Google optimization, scripts, or lead strategies</p>
+            
+            <a href="https://perchance.org/customizable-ai-chat-bot" target="_blank"
+               class="inline-flex items-center gap-3 bg-white text-slate-900 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-100 transition">
+                Open AI Assistant <i class="fas fa-arrow-right"></i>
+            </a>
+            <p class="text-xs text-slate-400 mt-3">Uses the custom system prompt we created earlier</p>
+        </div>
+    </div>
+
+    <script>
+        function runGoogleAudit() {
+            const resultBox = document.getElementById('audit-result');
+            resultBox.classList.remove('hidden');
+
+            // Simulated realistic results
+            const score = Math.floor(Math.random() * 22) + 71;
+            document.getElementById('score-value').innerText = score;
+            
+            document.getElementById('score-complete').innerText = (Math.floor(Math.random() * 25) + 68) + '%';
+            document.getElementById('score-reviews').innerText = ['Good', 'Excellent', 'Needs Work'][Math.floor(Math.random()*3)];
+            document.getElementById('score-photos').innerText = ['Excellent', 'Good', 'Average'][Math.floor(Math.random()*3)];
+            document.getElementById('score-response').innerText = (Math.random() * 3 + 1).toFixed(1) + ' hrs avg';
+
+            const recommendations = [
+                "Add more recent photos and respond to all reviews within 24 hours.",
+                "Optimize your services list for 'emergency plumber Santa Rosa'.",
+                "Post weekly updates and Q&A answers to boost local visibility."
+            ];
+            document.getElementById('key-recommendation').innerText = recommendations[Math.floor(Math.random() * recommendations.length)];
         }
 
-        .premium-shadow {
-            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+        function generateAd(type) {
+            const result = document.getElementById('ad-result');
+            const content = document.getElementById('ad-content');
+            result.classList.remove('hidden');
+
+            if (type === 'funny') {
+                content.innerHTML = `Funny 15-second Ad Script:<br><br>
+[Hot living room scene]<br>
+Wife: "It's 98 degrees and the AC just died!"<br>
+Kid: "We're turning into puddles!"<br><br>
+[Mike walks in smiling]<br>
+Mike: "Relax. I've fixed worse... actually, no I haven't."<br><br>
+<strong>Voiceover:</strong> "When your AC dies, call Sonoma Cool Air.<br>
+We show up before you melt. 707-555-0199"`;
+            } else {
+                content.innerHTML = `Catchy Jingle Idea:<br><br>
+(Upbeat simple melody)<br><br>
+"Eight-oh-seven... five-five-five... one-two-three-four...<br>
+Sonoma Cool Air! Stay cool, call today!<br>
+Eight-oh-seven... five-five-five... one-two-three-four...<br>
+Sonoma Cool Air — We fix it right away!"`;
+            }
         }
 
-        .glass {
-            background: rgba(255,255,255, 0.06);
-            backdrop-filter: blur(20px);
+        function copyAdText() {
+            const text = document.getElementById('ad-content').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.currentTarget;
+                alert("Copied to clipboard!");
+            });
         }
 
-        .section-header {
-            font-size: 2.25rem;
-            line-height: 1.1;
+        function showContact() {
+            alert("Thanks! Message me on X (@_D2Williams) or Sonoma County Facebook groups to get started.");
+        }
+
+        // Keyboard support
+        document.addEventListener('keydown', function(e) {
+            if (e.key === "?" && document.activeElement.tagName === "BODY") {
+                document.getElementById('audit').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>            line-height: 1.1;
             letter-spacing: -0.04em;
         }
 
